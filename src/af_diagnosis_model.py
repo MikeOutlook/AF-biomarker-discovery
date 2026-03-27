@@ -28,12 +28,12 @@ print("="*60)
 print("\n[Step 1] Loading data...")
 
 # 加载基因表达矩阵
-expr_41177 = pd.read_csv('GSE41177-RNA-seq-matrix.csv', index_col=0)
-expr_79768 = pd.read_csv('GSE79768-RNA-seq-matrix.csv', index_col=0)
+expr_41177 = pd.read_csv('../data/GSE41177-RNA-seq-matrix.csv', index_col=0)
+expr_79768 = pd.read_csv('../data/GSE79768-RNA-seq-matrix.csv', index_col=0)
 
 # 加载临床数据
-clinical_41177 = pd.read_csv('clinical_GSE41177.csv')
-clinical_79768 = pd.read_csv('clinical_GSE79768.csv')
+clinical_41177 = pd.read_csv('../data/clinical_GSE41177.csv')
+clinical_79768 = pd.read_csv('../data/clinical_GSE79768.csv')
 
 print(f"GSE41177: {expr_41177.shape[1]} 个样本, {expr_41177.shape[0]} 个基因")
 print(f"GSE79768: {expr_79768.shape[1]} 个样本, {expr_79768.shape[0]} 个基因")

@@ -5,6 +5,7 @@
   <img src="https://img.shields.io/badge/Scikit--learn-1.0+-orange.svg" alt="Scikit-learn">
   <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License">
   <img src="https://img.shields.io/badge/Status-Complete-brightgreen.svg" alt="Status">
+  <img src="https://github.com/MikeOutlook/AF-biomarker-discovery/actions/workflows/run_model.yml/badge.svg" alt="CI">
 </p>
 
 > 🏥 A machine learning approach to diagnose Atrial Fibrillation (AF) and discover biomarkers using gene expression data from GSE41177 and GSE79768 datasets.
@@ -107,6 +108,24 @@ python af_diagnosis_model.py
 python af_diagnosis_model_with_clinical.py
 ```
 
+## 🔄 CI/CD Automation
+
+This project uses GitHub Actions to automatically run the model on every push.
+
+### Workflow
+- **Trigger**: On every push to `main` branch
+- **Python Version**: 3.10
+- **Auto-run**: Executes `af_diagnosis_model_with_clinical.py`
+- **Artifacts**: Results are saved as GitHub Actions artifacts
+
+### Manual Run
+
+```bash
+# From src folder
+cd src
+python af_diagnosis_model_with_clinical.py
+```
+
 ## 📁 Project Structure
 
 ```
@@ -164,9 +183,9 @@ If you use this code in your research, please cite:
 ```bibtex
 @software{af_biomarker_discovery,
   title={AF Biomarker Discovery},
-  author={Your Name},
-  year={2024},
-  url={https://github.com/yourusername/AF-biomarker-discovery}
+  author={Ziheng Zheng},
+  year={2026},
+  url={https://github.com/MikeOutlook/AF-biomarker-discovery}
 }
 ```
 
