@@ -1,4 +1,4 @@
-# Atrial Fibrillation Diagnosis Model based on Gene Expression
+# Atrial Fibrillation Diagnosis Model based on Gene Expression and Clinical Features
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.8+-blue.svg" alt="Python">
@@ -8,11 +8,13 @@
   <img src="https://github.com/MikeOutlook/AF-biomarker-discovery/actions/workflows/run_model.yml/badge.svg" alt="CI">
 </p>
 
-> 🏥 A machine learning approach to diagnose Atrial Fibrillation (AF) and discover biomarkers using gene expression data from GSE41177 and GSE79768 datasets.
+> 🏥 A machine learning approach to diagnose Atrial Fibrillation (AF) and discover biomarkers using gene expression data combined with clinical features (Age, Gender) from GSE41177 and GSE79768 datasets.
 
 ## 🎯 Project Overview
 
-This project develops a clinical diagnosis model for **Atrial Fibrillation (AF)** using gene expression data from cardiac tissue samples. By analyzing the transcriptome signatures, we aim to distinguish AF patients from those with normal Sinus Rhythm.
+This project develops a clinical diagnosis model for **Atrial Fibrillation (AF)** using gene expression data combined with clinical features (Age, Gender) from cardiac tissue samples. By analyzing the transcriptome signatures along with demographic information, we aim to distinguish AF patients from those with normal Sinus Rhythm.
+
+> **Note**: Data cleaning and preprocessing were completed prior to modeling. The machine learning pipeline (feature selection, model training, and evaluation) was developed with assistance from **Claude Code**.
 
 ### What is Atrial Fibrillation?
 
@@ -44,10 +46,10 @@ Atrial Fibrillation (AF) is the most common cardiac arrhythmia, affecting millio
 ```
 
 ### Pipeline
-1. **Data Loading**: Load gene expression matrices and clinical metadata
+1. **Data Loading**: Load gene expression matrices and clinical metadata (data already cleaned)
 2. **Data Merging**: Combine GSE41177 and GSE79768 datasets
 3. **Preprocessing**: Missing value imputation & Standardization
-4. **Feature Selection**: ANOVA-based selection of top 100 discriminative genes
+4. **Feature Selection**: ANOVA-based selection of top 100 discriminative genes + clinical features
 5. **Model Training**: Compare Logistic Regression, Random Forest, and SVM
 6. **Evaluation**: Cross-validation and test set evaluation
 
@@ -101,10 +103,7 @@ pip install -r requirements.txt
 ### Run the Model
 
 ```bash
-# Basic model (gene expression only)
-python af_diagnosis_model.py
-
-# Model with clinical features
+# Model with gene expression + clinical features (Age, Gender)
 python af_diagnosis_model_with_clinical.py
 ```
 
@@ -121,9 +120,7 @@ This project uses GitHub Actions to automatically run the model on every push.
 ### Manual Run
 
 ```bash
-# From src folder
-cd src
-python af_diagnosis_model_with_clinical.py
+python src/af_diagnosis_model_with_clinical.py
 ```
 
 ## 📁 Project Structure
@@ -131,17 +128,18 @@ python af_diagnosis_model_with_clinical.py
 ```
 AF-biomarker-discovery/
 ├── data/
-│   ├── GSE41177-RNA-seq-matrix.csv    # Raw gene expression
+│   ├── GSE41177-RNA-seq-matrix.csv    # Raw gene expression (cleaned)
 │   ├── GSE79768-RNA-seq-matrix.csv
 │   ├── clinical_GSE41177.csv          # Clinical metadata
 │   └── clinical_GSE79768.csv
 ├── src/
-│   ├── af_diagnosis_model.py          # Main model script
-│   └── af_diagnosis_model_with_clinical.py  # With clinical features
+│   └── af_diagnosis_model_with_clinical.py  # Model with gene + clinical features
 ├── results/
 │   ├── important_genes.csv            # Top discriminative genes
+│   ├── important_genes_with_clinical.csv  # Genes + clinical features
 │   ├── feature_importance.csv         # Feature importance rankings
-│   └── model_performance.csv          # Model comparison results
+│   ├── model_performance.csv          # Model comparison results
+│   └── clinical_feature_comparison.csv
 ├── README.md
 ├── LICENSE
 └── requirements.txt
