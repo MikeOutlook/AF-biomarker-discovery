@@ -1,158 +1,138 @@
-# Atrial Fibrillation Diagnosis Model based on Gene Expression and Clinical Features
+# Atrial Fibrillation (AF) Diagnosis Model
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.8+-blue.svg" alt="Python">
   <img src="https://img.shields.io/badge/Scikit--learn-1.0+-orange.svg" alt="Scikit-learn">
   <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License">
-  <img src="https://img.shields.io/badge/Status-Complete-brightgreen.svg" alt="Status">
-  <img src="https://github.com/MikeOutlook/AF-biomarker-discovery/actions/workflows/run_model.yml/badge.svg" alt="CI">
+  <img src="https://img.shields.io/badge/Status-Active-brightgreen.svg" alt="Status">
 </p>
 
-> 🏥 A machine learning approach to diagnose Atrial Fibrillation (AF) and discover biomarkers using gene expression data combined with clinical features (Age, Gender) from GSE41177 and GSE79768 datasets.
+> 🏥 An end-to-end machine learning pipeline for diagnosing **Atrial Fibrillation (AF)** using gene expression data and clinical features. Built with CLI interface for easy training, prediction, and evaluation.
 
-## 🎯 Project Overview
+## What is Atrial Fibrillation?
 
-This project develops a clinical diagnosis model for **Atrial Fibrillation (AF)** using gene expression data combined with clinical features (Age, Gender) from cardiac tissue samples. By analyzing the transcriptome signatures along with demographic information, we aim to distinguish AF patients from those with normal Sinus Rhythm.
+Atrial Fibrillation (AF) is the most common cardiac arrhythmia, affecting millions worldwide. It significantly increases the risk of stroke, heart failure, and cardiovascular complications. Early and accurate diagnosis is crucial for effective treatment.
 
-> **Note**: Data cleaning and preprocessing were completed prior to modeling. The machine learning pipeline (feature selection, model training, and evaluation) was developed with assistance from **Claude Code**.
-
-### What is Atrial Fibrillation?
-
-Atrial Fibrillation (AF) is the most common cardiac arrhythmia, affecting millions of people worldwide. It significantly increases the risk of stroke, heart failure, and other cardiovascular complications. Early and accurate diagnosis is crucial for effective treatment.
-
-## 📊 Dataset
-
-| Dataset | Samples | AF | Sinus Rhythm | Platform |
-|---------|---------|-----|--------------|----------|
-| GSE41177 | 38 | 32 | 6 | GPL570 |
-| GSE79768 | 26 | 14 | 12 | GPL570 |
-| **Total** | **64** | **46** | **18** | - |
-
-### Features
-- **Gene Expression**: ~22,000 genes per sample
-- **Clinical Features**: Age, Gender
-
-## 🔬 Methodology
-
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  1.Data Loading │ ──► │2.Data Merging   │ ──► │3.Preprocessing  │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-                                                        │
-                                                        ▼
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│ 6.Model Saving │ ◄── │5.Model Training │ ◄── │4.Feature Select│
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-```
-
-### Pipeline
-1. **Data Loading**: Load gene expression matrices and clinical metadata (data already cleaned)
-2. **Data Merging**: Combine GSE41177 and GSE79768 datasets
-3. **Preprocessing**: Missing value imputation & Standardization
-4. **Feature Selection**: ANOVA-based selection of top 100 discriminative genes + clinical features
-5. **Model Training**: Compare Logistic Regression, Random Forest, and SVM
-6. **Evaluation**: Cross-validation and test set evaluation
-
-## 📈 Results
-
-### Model Performance (With Clinical Features)
-
-| Model | Test Accuracy | CV Accuracy | Std Dev |
-|-------|---------------|--------------|---------|
-| Logistic Regression | 84.62% | 80.95% | ±17.82% |
-| **Random Forest** | **100%** | **84.49%** | **±7.75%** |
-| SVM (RBF kernel) | 100% | 84.42% | ±4.30% |
-
-### Top 10 Discriminative Genes
-
-| Rank | Gene | Score |
-|------|------|-------|
-| 1 | **STUB1** | 55.77 |
-| 2 | **NCF2** | 49.55 |
-| 3 | **S100A12** | 47.47 |
-| 4 | **RAD23B** | 45.52 |
-| 5 | **CXCR2** | 43.28 |
-| 6 | **CLC** | 43.12 |
-| 7 | **UBE2M** | 42.75 |
-| 8 | **S100A6** | 40.94 |
-| 9 | **NEIL2** | 40.50 |
-| 10 | **DOCK1** | 40.33 |
-
-> 📝 **Note**: These genes are involved in oxidative stress, inflammation, and protein degradation pathways, which are known to be dysregulated in AF.
+This project uses gene expression profiles from cardiac tissue samples to distinguish AF patients from those with normal Sinus Rhythm.
 
 ## 🚀 Quick Start
-
-### Prerequisites
-
-```bash
-Python 3.8+
-pandas
-numpy
-scikit-learn
-matplotlib
-```
 
 ### Installation
 
 ```bash
-git clone https://github.com/yourusername/AF-biomarker-discovery.git
+git clone https://github.com/MikeOutlook/AF-biomarker-discovery.git
 cd AF-biomarker-discovery
 pip install -r requirements.txt
 ```
 
-### Run the Model
+### Train a Model
 
 ```bash
-# Model with gene expression + clinical features (Age, Gender)
-python af_diagnosis_model_with_clinical.py
+python af_diagnosis/cli.py run --data data/ --output results/
 ```
 
-## 🔄 CI/CD Automation
-
-This project uses GitHub Actions to automatically run the model on every push.
-
-### Workflow
-- **Trigger**: On every push to `main` branch
-- **Python Version**: 3.10
-- **Auto-run**: Executes `af_diagnosis_model_with_clinical.py`
-- **Artifacts**: Results are saved as GitHub Actions artifacts
-
-### Manual Run
+### Predict on New Samples
 
 ```bash
-python src/af_diagnosis_model_with_clinical.py
+# Using CLI
+python af_diagnosis/cli.py predict --model results/rf_model.pkl --sample new_samples.csv
 ```
+
+### Evaluate Model Performance
+
+```bash
+python af_diagnosis/cli.py eval --model results/rf_model.pkl --test test_data.csv --plots
+```
+
+## 📊 Results
+
+| Model | Test Accuracy | CV Accuracy |
+|-------|--------------|-------------|
+| Logistic Regression | 84.62% | 80.95% |
+| **Random Forest** | **100%** | **84.49%** |
+| SVM (RBF) | 100% | 84.42% |
+
+### Top Discriminative Genes
+
+| Rank | Gene | Pathway |
+|------|------|---------|
+| 1 | **STUB1** | Oxidative Stress |
+| 2 | **NCF2** | Inflammation |
+| 3 | **S100A12** | Inflammation |
+| 4 | **RAD23B** | DNA Repair |
+| 5 | **CXCR2** | Inflammation |
+
+> These genes are involved in pathways known to be dysregulated in AF.
 
 ## 📁 Project Structure
 
 ```
 AF-biomarker-discovery/
-├── data/
-│   ├── GSE41177-RNA-seq-matrix.csv    # Raw gene expression (cleaned)
+├── af_diagnosis/          # Main package
+│   ├── cli.py            # Command-line interface
+│   ├── pipeline.py       # Training pipeline
+│   ├── inference.py     # Prediction API
+│   ├── evaluation.py   # Metrics & visualization
+│   └── io.py          # Data I/O
+├── data/                 # Gene expression datasets
+│   ├── GSE41177-RNA-seq-matrix.csv
 │   ├── GSE79768-RNA-seq-matrix.csv
-│   ├── clinical_GSE41177.csv          # Clinical metadata
+│   ├── clinical_GSE41177.csv
 │   └── clinical_GSE79768.csv
-├── src/
-│   └── af_diagnosis_model_with_clinical.py  # Model with gene + clinical features
-├── results/
-│   ├── important_genes.csv            # Top discriminative genes
-│   ├── important_genes_with_clinical.csv  # Genes + clinical features
-│   ├── feature_importance.csv         # Feature importance rankings
-│   ├── model_performance.csv          # Model comparison results
-│   └── clinical_feature_comparison.csv
+├── results/              # Output results
 ├── README.md
-├── LICENSE
 └── requirements.txt
 ```
 
-## 🔬 Key Findings
+## 🔧 CLI Options
 
-1. **High Diagnostic Accuracy**: Random Forest and SVM achieve >84% cross-validation accuracy
-2. **Gene Signatures**: Identified 100 genes that significantly differentiate AF from Sinus Rhythm
-3. **Biological Relevance**: Top genes (STUB1, NCF2, S100A12) are involved in oxidative stress and inflammation pathways
-4. **Clinical Features**: Age and gender show limited predictive value in this dataset
+### Training Options
 
-## 🧬 Biological Interpretation
+```bash
+python af_diagnosis/cli.py run [options]
+
+Options:
+  --data DATA         Data directory (default: data/)
+  --output OUTPUT   Output directory (default: results/)
+  --models MODELS   Models: lr,rf,svm (default: lr,rf,svm)
+  -k N_FEATURES   Number of features (default: 100)
+  --cv CV          Cross-validation folds (default: 3)
+  --test-size     Test set proportion (default: 0.2)
+```
+
+### Prediction Options
+
+```bash
+python af_diagnosis/cli.py predict [options]
+
+Options:
+  --model MODEL      Path to saved model
+  --sample SAMPLE   Path to sample CSV or JSON
+  --threshold     Decision threshold (default: 0.5)
+```
+
+### Evaluation Options
+
+```bash
+python af_diagnosis/cli.py eval [options]
+
+Options:
+  --model MODEL    Path to saved model
+  --test TEST     Test data CSV
+  --plots        Generate visualization plots
+```
+
+## 📈 Dataset
+
+| Dataset | Samples | AF | Sinus Rhythm |
+|---------|---------|-----|--------------|
+| GSE41177 | 38 | 32 | 6 |
+| GSE79768 | 26 | 14 | 12 |
+| **Total** | **64** | **46** | **18** |
+
+Features: ~22,000 genes per sample + clinical (Age, Gender)
+
+## 🧬 Biological Significance
 
 The identified biomarker genes are involved in:
 
@@ -161,34 +141,20 @@ The identified biomarker genes are involved in:
 - **DNA Repair**: RAD23B, NEIL2
 - **Cell Signaling**: DOCK1
 
-These pathways are known to be activated in atrial fibrillation and represent potential therapeutic targets.
+These pathways are known to be activated in atrial fibrillation.
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](LICENSE) file.
 
 ## 🙏 Acknowledgments
 
-- Data sourced from [GEO (Gene Expression Omnibus)](https://www.ncbi.nlm.nih.gov/geo/)
-- Original studies:
-  - GSE41177: Cardiaac tissue gene expression in atrial fibrillation
-  - GSE79768: Gene expression profiling in human atrial fibrillation
-
-## 📚 Citation
-
-If you use this code in your research, please cite:
-
-```bibtex
-@software{af_biomarker_discovery,
-  title={AF Biomarker Discovery},
-  author={Ziheng Zheng},
-  year={2026},
-  url={https://github.com/MikeOutlook/AF-biomarker-discovery}
-}
-```
+- Data from [GEO (Gene Expression Omnibus)](https://www.ncbi.nlm.nih.gov/geo/):
+  - GSE41177: Cardiac tissue gene expression in AF
+  - GSE79768: Gene expression profiling in human AF
 
 ---
 
 <p align="center">
-  Made with ❤️ for cardiac research
+Made with ❤️ for cardiac research
 </p>
